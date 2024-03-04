@@ -18,5 +18,19 @@ if (!defined('ABSPATH')) {
 }
 $dir = plugin_dir_path(__FILE__);
 require_once($dir . 'wp-job-cpt.php');
-require_once($dir . 'wp-job-rander-admin.php');
+require_once($dir . 'wp-job-settings.php');
 require_once($dir . 'wp-job-fields.php');
+
+function dwwp_admin_enqueue_scripts()
+{
+    global $pagenow, $typenow;
+    // var_dump($pagenow);
+
+    if (($pagenow == 'post.php' || $pagenow == 'post-new.php') && $typenow == 'job') {
+        wp_enqueue_style('dwwp-admin-css', plugins_url('css/admin-jobs.css', __FILE__));
+        wp_enqueue_script('dwwp-job-js', plugins_url('js/admin-jobs.js', __FILE__), array('jquery', 'jquery-ui-datepicker'), '20240304', true);
+        wp_enqueue_style('jquery-style', 'https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.13.2/themes/base/jquery-ui.min.css');
+        wp_enqueue_script('dwwp-custom-quicktags', plugins_url('js/dwwp-quicktags.js', __FILE__), array('quicktags'), '20240304', true);
+    }
+}
+add_action('admin_enqueue_scripts', 'dwwp_admin_enqueue_scripts');

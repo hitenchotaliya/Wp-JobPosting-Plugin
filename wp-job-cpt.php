@@ -2,7 +2,6 @@
 //wp-job-cpt. cpt= custom post type
 function dwwp_register_post_type()
 {
-
     $singular = 'Job Listing';
     $plural = 'Job Listings';
 
@@ -46,11 +45,8 @@ function dwwp_register_post_type()
             'pages' => true,
             'feeds' => true,
         ),
-        'support' => array(
-            'title',
-            'editor',
-            'author',
-            'custom_fields'
+        'supports' => array(
+            'title'
         )
     );
     register_post_type('job', $args);
