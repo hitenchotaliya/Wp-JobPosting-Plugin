@@ -51,14 +51,31 @@ function reorder_admin_jobs_callback()
 
 }
 
-add_action('wp_ajax_save_post_order', 'save_post_order_callback');
 
-function save_post_order_callback()
+// In wp-job-setting.php
+
+function dwwp_save_reorder()
 {
+    if (!check_ajax_referer('wp_job_order_nonce', 'security', false)) {
+        return wp_send_json_error('Invalid Nonce');
+    }
     if (!current_user_can('manage_options')) {
         wp_send_json_error('Unauthorized', 403);
     }
 
-    $order = isset($_POST['order']) ? sanitize_text_field($_POST['order']) : '';
-    wp_send_json_success('Order saved successfully');
+    $order = isset($_POST['order']) ? $_POST['order'] : array();
+
+    foreach ($order as $position => $item_id) {
+        $post = array(
+            'ID' => (int)$item_id,
+            'menu_order' => (int)$position
+        );
+        wp_update_post($post);
+    }
+    wp_send_json_success('Post Saved');
 }
+
+/**so here wp_ajax_ after this you can see save_sort that is action that is define in ajx call.
+ * so this is dynamic request. wp_ajax_save_sort is now save_sort getting from the action
+ */
+add_action('wp_ajax_save_sort', 'dwwp_save_reorder');

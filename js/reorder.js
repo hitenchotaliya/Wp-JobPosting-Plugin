@@ -1,6 +1,8 @@
+// In reorder.js
+
 jQuery(document).ready(function ($) {
     var sortList = $('ul#custom-type-list');
-    var animation = $('#load-animation');
+    var animation = $('#loading-animation');
     var pageTitle = $('div h2');
 
     if (sortList.length) {
@@ -8,25 +10,28 @@ jQuery(document).ready(function ($) {
             update: function (event, ui) {
                 animation.show();
 
-                var order = sortList.sortable('toArray').toString();
+                var order = sortList.sortable('toArray');
 
                 $.ajax({
                     url: ajaxurl,
                     type: 'POST',
                     dataType: 'json',
                     data: {
-                        action: 'save_post_order',
-                        order: order
+                        action: 'save_sort',
+                        order: order,
+                        security: WP_JOB_LISTING.security,
                     },
                     success: function (response) {
-                        // console.log("Success: ", response);
                         animation.hide();
-                        pageTitle.after('<div class="updated"><p>Job sort order has been saved</p></div>');
+                        if (true === response.success) {
+                            pageTitle.after('<div id="message" class="updated"><p>' + WP_JOB_LISTING.success + '</p></div>');
+                        } else {
+                            pageTitle.after('<div id="message" class="error"><p>' + WP_JOB_LISTING.failure + '</p></div>'); // Correct the failure message
+                        }
                     },
-                    error: function (error) {
-                        // console.log("Error: ", error);
+                    error: function (response) {
                         animation.hide();
-                        pageTitle.after('<div class="error"><p>There was an error saving the sort order,or you do not have proper permission.</p></div>');
+                        pageTitle.after('<div id="message" class="error"><p>' + WP_JOB_LISTING.failure + '</p></div>'); // Correct the failure message
                     }
                 });
             }
