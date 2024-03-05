@@ -20,6 +20,7 @@ $dir = plugin_dir_path(__FILE__);
 require_once($dir . 'wp-job-cpt.php');
 require_once($dir . 'wp-job-settings.php');
 require_once($dir . 'wp-job-fields.php');
+require_once($dir . 'wp-job-shortcode.php');
 
 function dwwp_admin_enqueue_scripts()
 {
