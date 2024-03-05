@@ -64,3 +64,8 @@
     background-color: #ffffff !important;
     border-bottom: nonw !important;
 }
+
+.job-error {
+    color: rebeccapurple;
+    background-color: red;
+}
