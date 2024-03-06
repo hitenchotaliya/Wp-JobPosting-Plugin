@@ -89,3 +89,19 @@ function dwwp_register_taxonomy()
 }
 
 add_action('init', 'dwwp_register_taxonomy');
+
+function dwwp_load_templates()
+{
+
+    if (get_query_var('post_type') !== 'job') {
+        return;
+    }
+    if (is_archive() || is_search()) {
+        if (file_exists(get_stylesheet_directory() . 'archive-job.php')) {
+            return get_stylesheet_directory() . 'archive-job.php';
+        } else {
+            return plugin_dir_path(__FILE__) . 'templates/archive-job.php';
+        }
+    }
+}
+add_action('template_include', 'dwwp_load_templates');
